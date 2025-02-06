@@ -5,8 +5,8 @@ window = tk.Tk()
 # 1
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
-window_width = int(screen_width * 1.0)
-window_height = int(screen_height * 1.0)
+window_width = int(screen_width * 0.9)
+window_height = int(screen_height * 0.8)
 window.geometry(f"{window_width}x{window_height}")
 
 # 2
@@ -33,25 +33,44 @@ separator_canvas.create_line(0, 0, 0, window_height, fill="#16007a")
 x = 1
 tick = 0
 
+counter_value = 0  
+counting = False
+counting_scheduled = False
+
+money_value = 0 #--> $$$$$$$$$$$ (-1 because 1 isn't 0)
+hmyhc = 0 #HowMuchYouHaveClicked
+
+UP1 = 100
+up1 = UP1
+
+
+
 #counter (stop and unstop)
 def ticksss():
   global tick, tickspeed
+
   tickspeed = 1 / (.001 * float(slider.get())) 
   tick += 1
   ticks_text.set(value=f"Ticks: {format(tick)}")
   window.after(int(tickspeed), ticksss)
 
 
+
 def toggle_counter():
   global counting, counter_value
+
   if not counting:
     counting = True
     counter_value = 1
     start_counting()
   else:
     counting = False
+
+
+
 def start_counting():
     global counter_value, x, counting_scheduled
+
     if counting and not counting_scheduled:
       counting_scheduled = True
       window.after(int(tickspeed), reset_scheduled_flag)
@@ -60,14 +79,15 @@ def start_counting():
       counter_text.set(value=f"Counter: {format(counter_value)}")
       counter_value += 1
       calculate_money()
+
+
       
 def reset_scheduled_flag():
   global counting_scheduled
+
   counting_scheduled = False
 
-counter_value = 0  
-counting = False
-counting_scheduled = False
+
 
 #THE FORMAT
 def format(number):
@@ -78,12 +98,12 @@ def format(number):
     
 #elssseeeeee 
 
-money_value = 0 #--> $$$$$$$$$$$ (-1 because 1 isn't 0)
-hmyhc = 0 #HowMuchYouHaveClicked
 def upgrades():
   global hmyhc
   hmyhc += 1
   upgrade.config(text=f"Upgrades: {hmyhc:.0e}")
+
+
 
 def calculate_money():
   global money_value, x
@@ -92,31 +112,41 @@ def calculate_money():
 
   update() # Set configuration options for the label
   
+
+
 def butt1buy():
   global money_value, x, up1, upgrades
+
   if money_value < up1:
     pass
   else:
     x += 1
     money_value -= up1
-    up1 += 50
+    up1 += UP1
     
     upgrades()
     
     update()
     butt1.config(text=f"HEREEEE\n {up1}$")
-    
-up1 = 50
+
+
+
 def butt1buyfully():
   global money_value, up1, y
+
   if money_value < up1:
     pass
   else:
     upgrades()
+
+    update()
+
 #update text format
 def update():
   money_text.set(value=f"Money: ${format(money_value)}")
-  
+
+
+
 #For the "format"s * * * *
 ticks_text = tk.StringVar()  # Set the configuration options for the label
 counter_text = tk.StringVar()
